@@ -2,10 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Notes</title>
+<title>Notes App</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 body{
@@ -14,52 +12,112 @@ body{
   background:#000;
   color:#fff;
 }
-button,input,textarea{
-  width:100%;
-  padding:12px;
-  margin:6px 0;
-  border:none;
-  border-radius:10px;
-  font-size:15px;
+#login, #app{display:none;}
+.box{
+  max-width:420px;
+  margin:60px auto;
+  padding:20px;
 }
-button{background:#1f1f1f;color:#fff}
-.card{background:#111;padding:14px;border-radius:12px;margin:10px 0}
-.hidden{display:none}
+input,button{
+  width:100%;
+  padding:14px;
+  border-radius:10px;
+  border:none;
+  margin-top:10px;
+  font-size:16px;
+}
+button{background:#222;color:#fff}
+.note{
+  background:#111;
+  padding:12px;
+  border-radius:10px;
+  margin-top:10px;
+}
 </style>
 </head>
-
 <body>
 
-<div id="auth">
+<div id="login" class="box">
   <h2>Email Login</h2>
-  <input id="email" placeholder="Enter email">
+  <input id="email" type="email" placeholder="Enter email">
   <button onclick="login()">Send Login Link</button>
+  <p id="msg"></p>
 </div>
 
-<div id="app" class="hidden">
-  <h2>My Notes</h2>
-  <textarea id="noteText" placeholder="Write note..."></textarea>
-  <button onclick="addNote()">Save Note</button>
+<div id="app" class="box">
+  <h2>Your Notes</h2>
+  <input id="noteText" placeholder="Write note">
+  <button onclick="addNote()">Save</button>
   <div id="notes"></div>
   <button onclick="logout()">Logout</button>
 </div>
 
+<!-- ✅ Supabase CDN (VERY IMPORTANT) -->
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
 <script>
-const supabase = supabase.createClient(
-  "https://dzamnsktajdhzwgogibh.supabase.co",
-  "sb_publishable_9OlBc8vMTQHZxdgFukexDw__O08xdH_"
-);
+const supabaseUrl = "https://dzamnsktajdhzwgogibh.supabase.co";
+const supabaseKey = "sb_publishable_9OlBc8vMTQHZxdgFukexDw__O08xdH_";
+const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+const loginDiv = document.getElementById("login");
+const appDiv = document.getElementById("app");
 
 async function login(){
   const email = document.getElementById("email").value;
-  if(!email) return alert("Enter email");
-  await supabase.auth.signInWithOtp({
+  if(!email) return;
+
+  const { error } = await supabase.auth.signInWithOtp({
     email,
     options:{
-      emailRedirectTo:"https://x-cyber-2025.github.io/notes-app/"
+      emailRedirectTo: "https://x-cyber-2025.github.io/notes-app/"
     }
   });
-  alert("Check your email");
+
+  document.getElementById("msg").innerText =
+    error ? error.message : "Check your email inbox";
+}
+
+async function checkUser(){
+  const { data:{ session } } = await supabase.auth.getSession();
+  if(session){
+    loginDiv.style.display="none";
+    appDiv.style.display="block";
+    loadNotes();
+  }else{
+    loginDiv.style.display="block";
+  }
+}
+
+async function addNote(){
+  const text = noteText.value;
+  if(!text) return;
+
+  const user = (await supabase.auth.getUser()).data.user;
+
+  await supabase.from("notes").insert({
+    user_id: user.id,
+    body: text,
+    created: Date.now()
+  });
+
+  noteText.value="";
+  loadNotes();
+}
+
+async function loadNotes(){
+  const user = (await supabase.auth.getUser()).data.user;
+
+  const { data } = await supabase
+    .from("notes")
+    .select("*")
+    .eq("user_id", user.id)
+    .order("created",{ascending:false});
+
+  notes.innerHTML="";
+  data.forEach(n=>{
+    notes.innerHTML += `<div class="note">${n.body}</div>`;
+  });
 }
 
 async function logout(){
@@ -67,51 +125,7 @@ async function logout(){
   location.reload();
 }
 
-async function loadNotes(){
-  const {data} = await supabase
-    .from("notes")
-    .select("*")
-    .order("created",{ascending:false});
-
-  const box=document.getElementById("notes");
-  box.innerHTML="";
-  data.forEach(n=>{
-    const d=document.createElement("div");
-    d.className="card";
-    d.innerHTML=`
-      <pre>${n.body}</pre>
-      <button onclick="delNote('${n.id}')">Delete</button>
-    `;
-    box.appendChild(d);
-  });
-}
-
-async function addNote(){
-  const text=document.getElementById("noteText").value.trim();
-  if(!text)return;
-  const user=(await supabase.auth.getUser()).data.user;
-  await supabase.from("notes").insert({
-    body:text,
-    user_id:user.id,
-    created:Date.now()
-  });
-  noteText.value="";
-  loadNotes();
-}
-
-async function delNote(id){
-  await supabase.from("notes").delete().eq("id",id);
-  loadNotes();
-}
-
-supabase.auth.onAuthStateChange((_,session)=>{
-  if(session){
-    auth.classList.add("hidden");
-    app.classList.remove("hidden");
-    loadNotes();
-  }
-});
+checkUser();
 </script>
-
 </body>
 </html>
