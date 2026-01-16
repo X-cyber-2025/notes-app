@@ -5,81 +5,177 @@
 <title>Notes</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-<!-- Google Identity -->
-<script src="https://accounts.google.com/gsi/client" async defer></script>
-
 <style>
 *{box-sizing:border-box;}
-html,body{
-  margin:0;padding:0;height:100%;width:100%;
-  font-family:system-ui;color:#fff;background:#000;overflow:hidden;
-}
 
-/* ===== LOGIN ===== */
-#loginScreen{
-  position:fixed;inset:0;
-  display:flex;align-items:center;justify-content:center;
-  background:#000;z-index:9999;
+html,body{
+  margin:0;
+  padding:0;
+  height:100%;
+  width:100%;
+  font-family:system-ui;
+  color:#fff;
+  background:#000;
+  overflow:hidden;
 }
 
 /* ===== THIN RGB BORDER ===== */
-.rgb{position:relative;border-radius:16px;}
-.rgb::before{
-  content:"";position:absolute;inset:-1.2px;border-radius:18px;
-  background:linear-gradient(120deg,#ff004c,#00eaff,#7cff00,#ffb300,#ff004c);
-  background-size:300% 300%;animation:rgb 7s linear infinite;
+.rgb{
+  position:relative;
+  border-radius:16px;
 }
-.rgb::after{content:"";position:absolute;inset:0;border-radius:16px;background:#0a0a0a;}
+.rgb::before{
+  content:"";
+  position:absolute;
+  inset:-1.2px;
+  border-radius:18px;
+  background:linear-gradient(
+    120deg,
+    #ff004c,
+    #00eaff,
+    #7cff00,
+    #ffb300,
+    #ff004c
+  );
+  background-size:300% 300%;
+  animation:rgb 7s linear infinite;
+}
+.rgb::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:16px;
+  background:#0a0a0a;
+}
 .rgb>*{position:relative;z-index:2;}
-@keyframes rgb{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
 
+@keyframes rgb{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+
+/* ===== COMMON ===== */
 button{
-  border:none;border-radius:12px;padding:14px;font-size:15px;
-  background:rgba(255,255,255,0.15);color:#fff;font-weight:600;
+  border:none;
+  border-radius:12px;
+  padding:14px;
+  font-size:15px;
+  background:rgba(255,255,255,0.15);
+  color:#fff;
+  font-weight:600;
 }
 input{
-  border:none;border-radius:12px;padding:14px;font-size:15px;
-  background:rgba(255,255,255,0.15);color:#fff;width:100%;
+  border:none;
+  border-radius:12px;
+  padding:14px;
+  font-size:15px;
+  background:rgba(255,255,255,0.15);
+  color:#fff;
+  width:100%;
 }
 
 header{
-  display:flex;gap:10px;padding:14px;margin:14px;align-items:center;
+  display:flex;
+  gap:10px;
+  padding:14px;
+  margin:14px;
+  align-items:center;
 }
-header input{flex:1}
+header button{width:auto;}
+header input{flex:1;}
+
 .gray{background:rgba(255,255,255,0.25)}
 .red{background:#ff4d4d}
 
-#list,#trashList{padding:14px;height:calc(100vh - 120px);overflow-y:auto;}
-.card{padding:16px;margin-bottom:14px;}
-.time{font-size:12px;opacity:.65;margin-top:6px;}
-.actions{display:flex;gap:10px;margin-top:14px;}
+/* ===== LIST / TRASH ===== */
+#list,#trashList{
+  padding:14px;
+  height:calc(100vh - 120px);
+  overflow-y:auto;
+}
+
+.card{
+  padding:16px;
+  margin-bottom:14px;
+}
+
+/* ===== TIME ===== */
+.time{
+  font-size:12px;
+  opacity:.65;
+  margin-top:6px;
+}
+
+/* ===== ACTIONS ===== */
+.actions{
+  display:flex;
+  gap:10px;
+  margin-top:14px;
+}
 .actions button{flex:1}
 
-.screen{position:fixed;inset:0;display:none;z-index:999;}
-.page{height:100%;padding:16px;display:flex;flex-direction:column;background:#000;}
-.page-top{display:flex;gap:10px;margin-bottom:10px;}
-.page-body{flex:1;overflow-y:auto;}
-#viewBody{white-space:pre-wrap;word-break:break-word;line-height:1.6;}
-
-#editorScreen input,#editorScreen textarea{
-  background:transparent;border:none;outline:none;padding:0;margin-bottom:16px;
-  color:#fff;font-size:16px;width:100%;
+/* ===== SCREENS ===== */
+.screen{
+  position:fixed;
+  inset:0;
+  display:none;
+  z-index:999;
 }
-#editBody{resize:none;min-height:100%;line-height:1.6;}
+
+/* ===== CLEAN PAGE ===== */
+.page{
+  height:100%;
+  padding:16px;
+  display:flex;
+  flex-direction:column;
+  background:#000;
+}
+
+.page-top{
+  display:flex;
+  gap:10px;
+  margin-bottom:10px;
+}
+
+.page-body{
+  flex:1;
+  overflow-y:auto;
+}
+
+/* ===== VIEW ===== */
+#viewBody{
+  white-space:pre-wrap;
+  word-break:break-word;
+  line-height:1.6;
+}
+
+/* ===== EDIT CLEAN ===== */
+#editorScreen input,
+#editorScreen textarea{
+  background:transparent !important;
+  border:none !important;
+  outline:none !important;
+  box-shadow:none !important;
+  border-radius:0 !important;
+  padding:0 !important;
+  margin-bottom:16px;
+  color:#fff;
+  font-size:16px;
+  width:100%;
+}
+#editBody{
+  resize:none;
+  min-height:100%;
+  white-space:pre-wrap;
+  line-height:1.6;
+}
 </style>
 </head>
 
 <body>
 
-<!-- LOGIN -->
-<div id="loginScreen">
-  <div class="rgb" style="padding:30px;text-align:center">
-    <h2>Login with Google</h2>
-    <div id="gbtn"></div>
-  </div>
-</div>
-
-<header id="mainHeader" class="rgb" style="display:none">
+<header id="mainHeader" class="rgb">
   <button onclick="newNote()">New</button>
   <input id="search" placeholder="Search...">
   <button class="gray" onclick="openTrash()">Trash</button>
@@ -126,44 +222,33 @@ header input{flex:1}
 </div>
 
 <script>
-let userEmail=null;
-let notes=[],trash=[];
-let editId=null,currentView=null;
+let notes = JSON.parse(localStorage.getItem("notes")||"[]");
+let trash = JSON.parse(localStorage.getItem("trash")||"[]");
+let editId=null, currentView=null;
 
-/* Google Login */
-window.onload=()=>{
-  google.accounts.id.initialize({
-    client_id:"851882002170-usk4c1ogdl99rvl9s6mb6qmfq2snl65.apps.googleusercontent.com",
-    callback:res=>{
-      const data=JSON.parse(atob(res.credential.split(".")[1]));
-      userEmail=data.email;
-      initUser();
-    }
-  });
-  google.accounts.id.renderButton(
-    document.getElementById("gbtn"),
-    {theme:"outline",size:"large"}
-  );
-};
-
-/* per-user storage */
-function initUser(){
-  notes=JSON.parse(localStorage.getItem("notes_"+userEmail)||"[]");
-  trash=JSON.parse(localStorage.getItem("trash_"+userEmail)||"[]");
-  loginScreen.style.display="none";
-  mainHeader.style.display="flex";
-  render();
-}
+/* helpers */
 function saveAll(){
-  localStorage.setItem("notes_"+userEmail,JSON.stringify(notes));
-  localStorage.setItem("trash_"+userEmail,JSON.stringify(trash));
+  localStorage.setItem("notes",JSON.stringify(notes));
+  localStorage.setItem("trash",JSON.stringify(trash));
 }
-function needLock(n){return !n.locked||prompt("Enter Lock")===n.pin;}
+function needLock(n){
+  return !n.locked || prompt("Enter Lock")===n.pin;
+}
+
+/* ✅ 12-hour AM/PM formatter */
 function formatTime(ts){
   const d=new Date(ts);
-  return d.toLocaleString("en-US",{dateStyle:"medium",timeStyle:"short"});
+  const day=d.toLocaleDateString("en-GB",{weekday:"short"});
+  const date=d.toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"});
+  const time=d.toLocaleTimeString("en-US",{
+    hour:"numeric",
+    minute:"2-digit",
+    hour12:true
+  });
+  return `${day}, ${date} • ${time}`;
 }
 
+/* screen */
 function showScreen(n){
   mainHeader.style.display=n==="main"?"flex":"none";
   list.style.display=n==="main"?"block":"none";
@@ -172,39 +257,58 @@ function showScreen(n){
   trashScreen.style.display=n==="trash"?"block":"none";
   history.pushState({},"");
 }
-function goBack(){history.back()}
+function goBack(){history.back();}
 window.onpopstate=()=>showScreen("main");
 
-function render(f=""){
+/* render */
+function render(filter=""){
   list.innerHTML="";
-  notes.filter(n=>n.title.toLowerCase().includes(f.toLowerCase()))
-  .forEach(n=>{
-    const d=document.createElement("div");
-    d.className="card rgb";
-    d.innerHTML=`
-      <h3>${n.title}</h3>
-      <div class="time">${formatTime(n.created)}</div>
-      <div class="actions">
-        <button onclick="viewNote(${n.id})">View</button>
-        <button onclick="toggleLock(${n.id})">${n.locked?"Unlock":"Lock"}</button>
-        <button class="red" onclick="deleteNote(${n.id})">Delete</button>
-      </div>`;
-    list.appendChild(d);
-  });
+  notes
+    .filter(n=>n.title.toLowerCase().includes(filter.toLowerCase()))
+    .forEach(n=>{
+      const d=document.createElement("div");
+      d.className="card rgb";
+      d.innerHTML=`
+        <h3>${n.title}</h3>
+        <div class="time">${formatTime(n.created||n.id)}</div>
+        <div class="actions">
+          <button onclick="viewNote(${n.id})">View</button>
+          <button onclick="toggleLock(${n.id})">${n.locked?"Unlock":"Lock"}</button>
+          <button class="red" onclick="deleteNote(${n.id})">Delete</button>
+        </div>`;
+      list.appendChild(d);
+    });
 }
 
-function newNote(){editId=null;title.value=editBody.value="";showScreen("editor");}
+/* notes */
+function newNote(){
+  editId=null;
+  title.value=editBody.value="";
+  showScreen("editor");
+}
+
 function saveNote(){
   if(!editBody.value.trim())return;
   const now=Date.now();
   const t=title.value||editBody.value.split("\n")[0].slice(0,40);
   if(editId){
-    Object.assign(notes.find(x=>x.id===editId),{title:t,body:editBody.value});
+    Object.assign(notes.find(x=>x.id===editId),{
+      title:t,
+      body:editBody.value
+    });
   }else{
-    notes.unshift({id:now,created:now,title:t,body:editBody.value,locked:false,pin:null});
+    notes.unshift({
+      id:now,
+      created:now,
+      title:t,
+      body:editBody.value,
+      locked:false,
+      pin:null
+    });
   }
   saveAll();showScreen("main");render(search.value);
 }
+
 function viewNote(id){
   const n=notes.find(x=>x.id===id);
   if(!needLock(n))return;
@@ -213,6 +317,7 @@ function viewNote(id){
   viewBody.textContent=n.body;
   showScreen("view");
 }
+
 function editFromView(){
   if(!needLock(currentView))return;
   editId=currentView.id;
@@ -220,12 +325,19 @@ function editFromView(){
   editBody.value=currentView.body;
   showScreen("editor");
 }
+
 function toggleLock(id){
   const n=notes.find(x=>x.id===id);
-  if(n.locked){if(!needLock(n))return;n.locked=false;n.pin=null;}
-  else{const p=prompt("Set Lock");if(p){n.pin=p;n.locked=true;}}
+  if(n.locked){
+    if(!needLock(n))return;
+    n.locked=false;n.pin=null;
+  }else{
+    const p=prompt("Set Lock");
+    if(p){n.pin=p;n.locked=true;}
+  }
   saveAll();render(search.value);
 }
+
 function deleteNote(id){
   const n=notes.find(x=>x.id===id);
   if(!needLock(n))return;
@@ -233,6 +345,8 @@ function deleteNote(id){
   notes=notes.filter(x=>x.id!==id);
   saveAll();render(search.value);
 }
+
+/* trash */
 function openTrash(){
   trashList.innerHTML="";
   trash.forEach(n=>{
@@ -240,7 +354,7 @@ function openTrash(){
     d.className="card rgb";
     d.innerHTML=`
       <h3>${n.title}</h3>
-      <div class="time">${formatTime(n.created)}</div>
+      <div class="time">${formatTime(n.created||n.id)}</div>
       <div class="actions">
         <button onclick="restore(${n.id})">Restore</button>
         <button class="red" onclick="removeForever(${n.id})">Delete</button>
@@ -249,18 +363,24 @@ function openTrash(){
   });
   showScreen("trash");
 }
+
 function restore(id){
   notes.unshift(trash.find(x=>x.id===id));
   trash=trash.filter(x=>x.id!==id);
   saveAll();openTrash();
 }
+
 function removeForever(id){
+  const n=trash.find(x=>x.id===id);
+  if(!needLock(n))return;
   if(confirm("Delete permanently?")){
     trash=trash.filter(x=>x.id!==id);
     saveAll();openTrash();
   }
 }
+
 search.oninput=()=>render(search.value);
+render();
 </script>
 
 </body>
