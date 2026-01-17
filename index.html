@@ -2,385 +2,304 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Notes</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>PIYAS CC GEN</title>
 
 <style>
-*{box-sizing:border-box;}
-
+*{box-sizing:border-box}
 html,body{
-  margin:0;
-  padding:0;
-  height:100%;
-  width:100%;
-  font-family:system-ui;
-  color:#fff;
-  background:#000;
-  overflow:hidden;
+  margin:0;padding:0;
+  background:#050508;color:#e5e7eb;
+  font-family:Arial,sans-serif;
+  touch-action:manipulation;
+  overscroll-behavior:none;
+  -webkit-text-size-adjust:100%;
 }
+body{padding:14px}
 
-/* ===== THIN RGB BORDER ===== */
-.rgb{
-  position:relative;
-  border-radius:16px;
-}
-.rgb::before{
-  content:"";
-  position:absolute;
-  inset:-1.2px;
-  border-radius:18px;
-  background:linear-gradient(
-    120deg,
-    #ff004c,
-    #00eaff,
-    #7cff00,
-    #ffb300,
-    #ff004c
-  );
-  background-size:300% 300%;
-  animation:rgb 7s linear infinite;
-}
-.rgb::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  border-radius:16px;
-  background:#0a0a0a;
-}
-.rgb>*{position:relative;z-index:2;}
-
-@keyframes rgb{
+/* RGB */
+@keyframes rgbMove{
   0%{background-position:0% 50%}
   50%{background-position:100% 50%}
   100%{background-position:0% 50%}
 }
 
-/* ===== COMMON ===== */
-button{
-  border:none;
-  border-radius:12px;
+/* Glass */
+.glass{
+  position:relative;
   padding:14px;
-  font-size:15px;
-  background:rgba(255,255,255,0.15);
-  color:#fff;
-  font-weight:600;
+  margin-bottom:14px;
+  border-radius:18px;
+  background:#0b0b12;
+  overflow:hidden;
 }
-input{
-  border:none;
-  border-radius:12px;
-  padding:14px;
-  font-size:15px;
-  background:rgba(255,255,255,0.15);
-  color:#fff;
-  width:100%;
+.glass::before{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  border-radius:20px;
+  background:linear-gradient(
+    90deg,#ff004c,#ffb300,#00ff9d,#00c8ff,#7a5cff,#ff00c8,#ff004c
+  );
+  background-size:400% 400%;
+  animation:rgbMove 8s linear infinite;
 }
-
-header{
-  display:flex;
-  gap:10px;
-  padding:14px;
-  margin:14px;
-  align-items:center;
+.glass::after{
+  content:"";
+  position:absolute;
+  inset:2px;
+  border-radius:16px;
+  background:#0b0b12;
 }
-header button{width:auto;}
-header input{flex:1;}
+.glass>*{position:relative;z-index:2}
 
-.gray{background:rgba(255,255,255,0.25)}
-.red{background:#ff4d4d}
-
-/* ===== LIST / TRASH ===== */
-#list,#trashList{
-  padding:14px;
-  height:calc(100vh - 120px);
-  overflow-y:auto;
-}
-
-.card{
-  padding:16px;
+/* Title */
+#titleBox{
+  text-align:center;
+  font-size:22px;
+  font-weight:bold;
+  color:#ffd800;
   margin-bottom:14px;
 }
 
-/* ===== TIME ===== */
-.time{
-  font-size:12px;
-  opacity:.65;
-  margin-top:6px;
+/* Tabs */
+.tabs{display:flex;gap:10px;margin-bottom:14px}
+.tabs button{
+  flex:1;padding:10px;border-radius:14px;
+  background:#020617;color:#ffd800;
+  border:1px solid #334155;
+  font-weight:bold;cursor:pointer;
+}
+.tabs button.active{
+  border-color:#22d3ee;color:#00ff9d;
 }
 
-/* ===== ACTIONS ===== */
-.actions{
-  display:flex;
-  gap:10px;
-  margin-top:14px;
-}
-.actions button{flex:1}
-
-/* ===== SCREENS ===== */
-.screen{
-  position:fixed;
-  inset:0;
-  display:none;
-  z-index:999;
-}
-
-/* ===== CLEAN PAGE ===== */
-.page{
-  height:100%;
-  padding:16px;
-  display:flex;
-  flex-direction:column;
-  background:#000;
-}
-
-.page-top{
-  display:flex;
-  gap:10px;
-  margin-bottom:10px;
-}
-
-.page-body{
-  flex:1;
-  overflow-y:auto;
-}
-
-/* ===== VIEW ===== */
-#viewBody{
-  white-space:pre-wrap;
-  word-break:break-word;
-  line-height:1.6;
-}
-
-/* ===== EDIT CLEAN ===== */
-#editorScreen input,
-#editorScreen textarea{
-  background:transparent !important;
-  border:none !important;
-  outline:none !important;
-  box-shadow:none !important;
-  border-radius:0 !important;
-  padding:0 !important;
-  margin-bottom:16px;
-  color:#fff;
-  font-size:16px;
+/* Form */
+label{display:block;margin-bottom:6px;color:#ffd800;font-weight:bold}
+input,select,textarea{
   width:100%;
+  padding:12px;
+  border-radius:12px;
+  border:1px solid #0ea5e9;
+  background:#020617;
+  color:#00ff9d;
+  outline:none;
+  font-family:Courier New,monospace;
 }
-#editBody{
-  resize:none;
-  min-height:100%;
-  white-space:pre-wrap;
+textarea{height:180px;font-size:13px}
+button.main{
+  width:100%;padding:14px;border-radius:18px;
+  background:#020617;color:#ffd800;
+  border:1px solid #334155;
+  font-weight:bold;cursor:pointer;margin-bottom:8px;
+}
+
+/* Summary */
+.summaryItem{
+  display:flex;
+  justify-content:space-between;
+  font-family:Courier New,monospace;
+  font-size:15px;
+}
+.pass{color:#22ff00}
+.fail{color:#ff4d4d}
+.key{color:#ffd800}
+
+/* Card rows */
+.cardRow{
+  font-family:Courier New,monospace;
+  font-size:13px;
   line-height:1.6;
 }
+.val{color:#00ff9d}
+
+/* Big copy button */
+.copyBtn{
+  width:100%;
+  margin-top:14px;
+  padding:14px;
+  border-radius:16px;
+  background:#020617;
+  border:1px solid #334155;
+  color:#00ff9d;
+  font-size:14px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+/* Toast */
+#toast{
+  position:fixed;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#111;
+  color:#00ff9d;
+  padding:10px 18px;
+  border-radius:20px;
+  border:1px solid #00ff9d;
+  opacity:0;
+  transition:.3s;
+}
+#toast.show{opacity:1;bottom:30px}
 </style>
 </head>
 
 <body>
 
-<header id="mainHeader" class="rgb">
-  <button onclick="newNote()">New</button>
-  <input id="search" placeholder="Search...">
-  <button class="gray" onclick="openTrash()">Trash</button>
-</header>
+<div id="titleBox">PIYAS CC GEN</div>
 
-<div id="list"></div>
-
-<!-- EDIT -->
-<div id="editorScreen" class="screen">
-  <div class="page">
-    <div class="page-top">
-      <button onclick="goBack()">⬅ Back</button>
-      <button onclick="saveNote()">Save</button>
-    </div>
-    <div class="page-body">
-      <input id="title" placeholder="Title">
-      <textarea id="editBody" placeholder="Write note..."></textarea>
-    </div>
-  </div>
+<div class="tabs">
+  <button id="tabGen" class="active" onclick="showTab('gen')">GEN</button>
+  <button id="tabChk" onclick="showTab('chk')">CHECKER</button>
 </div>
 
-<!-- VIEW -->
-<div id="viewScreen" class="screen">
-  <div class="page">
-    <div class="page-top">
-      <button onclick="goBack()">⬅ Back</button>
-      <button onclick="editFromView()">✏ Edit</button>
-    </div>
-    <div class="page-body">
-      <h2 id="viewTitle"></h2>
-      <div id="viewBody"></div>
-    </div>
+<!-- GEN -->
+<div id="genTab">
+  <div class="glass"><label>BIN (min 6)</label><input id="bin"></div>
+  <div class="glass">
+    <label>Month</label>
+    <select id="month">
+      <option value="">Random</option>
+      <option>01</option><option>02</option><option>03</option>
+      <option>04</option><option>05</option><option>06</option>
+      <option>07</option><option>08</option><option>09</option>
+      <option>10</option><option>11</option><option>12</option>
+    </select>
   </div>
+  <div class="glass"><label>Year</label><input id="year"></div>
+  <div class="glass"><label>CVV</label><input id="cvv"></div>
+  <div class="glass"><label>Quantity (Max 1000)</label><input id="qty" value="10"></div>
+  <div class="glass">
+    <button class="main" onclick="generate()">GENERATE</button>
+    <button class="main" onclick="copyAll()">COPY ALL</button>
+  </div>
+  <textarea id="out" readonly></textarea>
 </div>
 
-<!-- TRASH -->
-<div id="trashScreen" class="screen">
-  <div class="page">
-    <div class="page-top">
-      <button onclick="goBack()">⬅ Back</button>
-    </div>
-    <div class="page-body" id="trashList"></div>
+<!-- CHECKER -->
+<div id="chkTab" style="display:none">
+
+  <!-- SUMMARY BOXES -->
+  <div id="summaryWrap" style="display:none">
+    <div class="glass"><div class="summaryItem"><span class="key">Total Cards</span><span id="sTotal">0</span></div></div>
+    <div class="glass"><div class="summaryItem"><span class="key">Valid</span><span id="sValid" class="pass">0</span></div></div>
+    <div class="glass"><div class="summaryItem"><span class="key">Invalid</span><span id="sInvalid" class="fail">0</span></div></div>
+    <div class="glass"><div class="summaryItem"><span class="key">Date OK</span><span id="sDateOk" class="pass">0</span></div></div>
+    <div class="glass"><div class="summaryItem"><span class="key">Date Bad</span><span id="sDateBad" class="fail">0</span></div></div>
   </div>
+
+  <div class="glass">
+    <label>Paste Cards (card|mm|yyyy|cvv)</label>
+    <textarea id="inp"></textarea>
+    <button class="main" onclick="runCheck()">START CHECK</button>
+  </div>
+
+  <div id="results"></div>
 </div>
+
+<div id="toast">Copied</div>
 
 <script>
-let notes = JSON.parse(localStorage.getItem("notes")||"[]");
-let trash = JSON.parse(localStorage.getItem("trash")||"[]");
-let editId=null, currentView=null;
-
-/* helpers */
-function saveAll(){
-  localStorage.setItem("notes",JSON.stringify(notes));
-  localStorage.setItem("trash",JSON.stringify(trash));
-}
-function needLock(n){
-  return !n.locked || prompt("Enter Lock")===n.pin;
+function showTab(t){
+  genTab.style.display=t==='gen'?'block':'none';
+  chkTab.style.display=t==='chk'?'block':'none';
+  tabGen.classList.toggle('active',t==='gen');
+  tabChk.classList.toggle('active',t==='chk');
 }
 
-/* ✅ 12-hour AM/PM formatter */
-function formatTime(ts){
-  const d=new Date(ts);
-  const day=d.toLocaleDateString("en-GB",{weekday:"short"});
-  const date=d.toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"});
-  const time=d.toLocaleTimeString("en-US",{
-    hour:"numeric",
-    minute:"2-digit",
-    hour12:true
+/* Helpers */
+function luhn(n){
+  let s=0,d=false;
+  for(let i=n.length-1;i>=0;i--){
+    let c=parseInt(n[i]); if(isNaN(c)) return false;
+    if(d){c*=2;if(c>9)c-=9}
+    s+=c; d=!d;
+  }
+  return s%10===0;
+}
+function dateOk(m,y){
+  const d=new Date(),cy=d.getFullYear(),cm=d.getMonth()+1;
+  return m>=1&&m<=12&&(y>cy||(y==cy&&m>=cm));
+}
+function randomYear(){return new Date().getFullYear()+Math.floor(Math.random()*6)}
+function randomMonth(y){
+  const d=new Date(),cy=d.getFullYear(),cm=d.getMonth()+1;
+  return y==cy?String(Math.floor(Math.random()*(12-cm+1))+cm).padStart(2,'0')
+              :String(Math.floor(Math.random()*12)+1).padStart(2,'0');
+}
+
+/* Generate */
+function generate(){
+  if(bin.value.length<6){toastMsg('BIN min 6');return;}
+  let q=Math.min(parseInt(qty.value)||10,1000),o=[];
+  for(let i=0;i<q;i++){
+    let c=bin.value;
+    while(c.length<16)c+=Math.floor(Math.random()*10);
+    let y=year.value||randomYear();
+    let m=month.value||randomMonth(y);
+    let v=cvv.value||Math.floor(100+Math.random()*900);
+    o.push(c+"|"+m+"|"+y+"|"+v);
+  }
+  out.value=o.join("\n");
+}
+
+/* Copy */
+function copyAll(){ if(!out.value){toastMsg('Nothing');return;} copyText(out.value); }
+function copyText(t){
+  const ta=document.createElement('textarea');
+  ta.value=t;document.body.appendChild(ta);
+  ta.select();document.execCommand('copy');
+  document.body.removeChild(ta);
+  toastMsg('Copied');
+}
+
+/* Checker + Summary */
+function runCheck(){
+  results.innerHTML='';
+  let total=0,validC=0,invalidC=0,dateOkC=0,dateBadC=0;
+
+  inp.value.trim().split("\n").forEach(l=>{
+    if(!l)return;
+    total++;
+    const p=l.split('|');
+    const num=p[0]||'', mm=p[1], yy=p[2], cv=p[3]||'';
+    const valid=luhn(num), dOK=dateOk(mm,yy);
+
+    if(valid) validC++; else invalidC++;
+    if(dOK) dateOkC++; else dateBadC++;
+
+    const box=document.createElement('div');
+    box.className='glass';
+    box.innerHTML=`
+      <div class="cardRow"><span class="key">Card</span> : <span class="val">${num}</span></div>
+      <div class="cardRow"><span class="key">MM</span>   : ${mm}</div>
+      <div class="cardRow"><span class="key">YY</span>   : ${yy}</div>
+      <div class="cardRow"><span class="key">CVV</span>  : ${cv}</div>
+      <hr>
+      <div class="cardRow"><span class="key">Valid</span> : <span class="${valid?'pass':'fail'}">${valid?'VALID':'INVALID'}</span></div>
+      <div class="cardRow"><span class="key">Date</span>  : <span class="${dOK?'pass':'fail'}">${dOK?'OK':'BAD'}</span></div>
+      <button class="copyBtn" onclick="copyText('${l}')">COPY THIS CARD</button>
+    `;
+    results.appendChild(box);
   });
-  return `${day}, ${date} • ${time}`;
+
+  summaryWrap.style.display='block';
+  sTotal.textContent=total;
+  sValid.textContent=validC;
+  sInvalid.textContent=invalidC;
+  sDateOk.textContent=dateOkC;
+  sDateBad.textContent=dateBadC;
 }
 
-/* screen */
-function showScreen(n){
-  mainHeader.style.display=n==="main"?"flex":"none";
-  list.style.display=n==="main"?"block":"none";
-  editorScreen.style.display=n==="editor"?"block":"none";
-  viewScreen.style.display=n==="view"?"block":"none";
-  trashScreen.style.display=n==="trash"?"block":"none";
-  history.pushState({},"");
+/* Toast */
+let tmr;
+function toastMsg(m){
+  toast.textContent=m;
+  toast.classList.add('show');
+  clearTimeout(tmr);
+  tmr=setTimeout(()=>toast.classList.remove('show'),1800);
 }
-function goBack(){history.back();}
-window.onpopstate=()=>showScreen("main");
-
-/* render */
-function render(filter=""){
-  list.innerHTML="";
-  notes
-    .filter(n=>n.title.toLowerCase().includes(filter.toLowerCase()))
-    .forEach(n=>{
-      const d=document.createElement("div");
-      d.className="card rgb";
-      d.innerHTML=`
-        <h3>${n.title}</h3>
-        <div class="time">${formatTime(n.created||n.id)}</div>
-        <div class="actions">
-          <button onclick="viewNote(${n.id})">View</button>
-          <button onclick="toggleLock(${n.id})">${n.locked?"Unlock":"Lock"}</button>
-          <button class="red" onclick="deleteNote(${n.id})">Delete</button>
-        </div>`;
-      list.appendChild(d);
-    });
-}
-
-/* notes */
-function newNote(){
-  editId=null;
-  title.value=editBody.value="";
-  showScreen("editor");
-}
-
-function saveNote(){
-  if(!editBody.value.trim())return;
-  const now=Date.now();
-  const t=title.value||editBody.value.split("\n")[0].slice(0,40);
-  if(editId){
-    Object.assign(notes.find(x=>x.id===editId),{
-      title:t,
-      body:editBody.value
-    });
-  }else{
-    notes.unshift({
-      id:now,
-      created:now,
-      title:t,
-      body:editBody.value,
-      locked:false,
-      pin:null
-    });
-  }
-  saveAll();showScreen("main");render(search.value);
-}
-
-function viewNote(id){
-  const n=notes.find(x=>x.id===id);
-  if(!needLock(n))return;
-  currentView=n;
-  viewTitle.textContent=n.title;
-  viewBody.textContent=n.body;
-  showScreen("view");
-}
-
-function editFromView(){
-  if(!needLock(currentView))return;
-  editId=currentView.id;
-  title.value=currentView.title;
-  editBody.value=currentView.body;
-  showScreen("editor");
-}
-
-function toggleLock(id){
-  const n=notes.find(x=>x.id===id);
-  if(n.locked){
-    if(!needLock(n))return;
-    n.locked=false;n.pin=null;
-  }else{
-    const p=prompt("Set Lock");
-    if(p){n.pin=p;n.locked=true;}
-  }
-  saveAll();render(search.value);
-}
-
-function deleteNote(id){
-  const n=notes.find(x=>x.id===id);
-  if(!needLock(n))return;
-  trash.unshift(n);
-  notes=notes.filter(x=>x.id!==id);
-  saveAll();render(search.value);
-}
-
-/* trash */
-function openTrash(){
-  trashList.innerHTML="";
-  trash.forEach(n=>{
-    const d=document.createElement("div");
-    d.className="card rgb";
-    d.innerHTML=`
-      <h3>${n.title}</h3>
-      <div class="time">${formatTime(n.created||n.id)}</div>
-      <div class="actions">
-        <button onclick="restore(${n.id})">Restore</button>
-        <button class="red" onclick="removeForever(${n.id})">Delete</button>
-      </div>`;
-    trashList.appendChild(d);
-  });
-  showScreen("trash");
-}
-
-function restore(id){
-  notes.unshift(trash.find(x=>x.id===id));
-  trash=trash.filter(x=>x.id!==id);
-  saveAll();openTrash();
-}
-
-function removeForever(id){
-  const n=trash.find(x=>x.id===id);
-  if(!needLock(n))return;
-  if(confirm("Delete permanently?")){
-    trash=trash.filter(x=>x.id!==id);
-    saveAll();openTrash();
-  }
-}
-
-search.oninput=()=>render(search.value);
-render();
 </script>
 
 </body>
