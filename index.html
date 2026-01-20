@@ -156,7 +156,7 @@ button.main{
 
 <!-- GEN -->
 <div id="genTab">
-  <div class="glass"><label>BIN (min 6)</label><input id="bin"></div>
+  <div class="glass"><label>BIN </label><input id="bin"></div>
   <div class="glass">
     <label>Month</label>
     <select id="month">
@@ -169,7 +169,7 @@ button.main{
   </div>
   <div class="glass"><label>Year</label><input id="year"></div>
   <div class="glass"><label>CVV</label><input id="cvv"></div>
-  <div class="glass"><label>Quantity (Max 1000)</label><input id="qty" value="10"></div>
+  <div class="glass"><label>Quantity </label><input id="qty" value="10"></div>
   <div class="glass">
     <button class="main" onclick="generate()">GENERATE</button>
     <button class="main" onclick="copyAll()">COPY ALL</button>
@@ -190,7 +190,7 @@ button.main{
   </div>
 
   <div class="glass">
-    <label>Paste Cards (card|mm|yyyy|cvv)</label>
+    <label>Paste Cards </label>
     <textarea id="inp"></textarea>
     <button class="main" onclick="runCheck()">START CHECK</button>
   </div>
@@ -201,6 +201,7 @@ button.main{
 <div id="toast">Copied</div>
 
 <script>
+/* Tabs */
 function showTab(t){
   genTab.style.display=t==='gen'?'block':'none';
   chkTab.style.display=t==='chk'?'block':'none';
@@ -229,7 +230,7 @@ function randomMonth(y){
               :String(Math.floor(Math.random()*12)+1).padStart(2,'0');
 }
 
-/* Generate */
+/* Generate (demo/testing only) */
 function generate(){
   if(bin.value.length<6){toastMsg('BIN min 6');return;}
   let q=Math.min(parseInt(qty.value)||10,1000),o=[];
@@ -254,14 +255,19 @@ function copyText(t){
   toastMsg('Copied');
 }
 
-/* Checker + Summary */
+/* Checker + Summary
+   EDIT: Valid cards will be shown FIRST */
 function runCheck(){
   results.innerHTML='';
   let total=0,validC=0,invalidC=0,dateOkC=0,dateBadC=0;
 
+  const validList=[];
+  const invalidList=[];
+
   inp.value.trim().split("\n").forEach(l=>{
-    if(!l)return;
+    if(!l) return;
     total++;
+
     const p=l.split('|');
     const num=p[0]||'', mm=p[1], yy=p[2], cv=p[3]||'';
     const valid=luhn(num), dOK=dateOk(mm,yy);
@@ -269,20 +275,29 @@ function runCheck(){
     if(valid) validC++; else invalidC++;
     if(dOK) dateOkC++; else dateBadC++;
 
-    const box=document.createElement('div');
-    box.className='glass';
-    box.innerHTML=`
-      <div class="cardRow"><span class="key">Card</span> : <span class="val">${num}</span></div>
-      <div class="cardRow"><span class="key">MM</span>   : ${mm}</div>
-      <div class="cardRow"><span class="key">YY</span>   : ${yy}</div>
-      <div class="cardRow"><span class="key">CVV</span>  : ${cv}</div>
-      <hr>
-      <div class="cardRow"><span class="key">Valid</span> : <span class="${valid?'pass':'fail'}">${valid?'VALID':'INVALID'}</span></div>
-      <div class="cardRow"><span class="key">Date</span>  : <span class="${dOK?'pass':'fail'}">${dOK?'OK':'BAD'}</span></div>
-      <button class="copyBtn" onclick="copyText('${l}')">COPY THIS CARD</button>
+    const cardHTML=`
+      <div class="glass">
+        <div class="cardRow"><span class="key">Card</span> : <span class="val">${num}</span></div>
+        <div class="cardRow"><span class="key">MM</span>   : ${mm}</div>
+        <div class="cardRow"><span class="key">YY</span>   : ${yy}</div>
+        <div class="cardRow"><span class="key">CVV</span>  : ${cv}</div>
+        <hr>
+        <div class="cardRow"><span class="key">Valid</span> :
+          <span class="${valid?'pass':'fail'}">${valid?'VALID':'INVALID'}</span>
+        </div>
+        <div class="cardRow"><span class="key">Date</span>  :
+          <span class="${dOK?'pass':'fail'}">${dOK?'OK':'BAD'}</span>
+        </div>
+        <button class="copyBtn" onclick="copyText('${l}')">COPY THIS CARD</button>
+      </div>
     `;
-    results.appendChild(box);
+
+    if(valid) validList.push(cardHTML);
+    else invalidList.push(cardHTML);
   });
+
+  /* VALID first */
+  results.innerHTML = validList.join('') + invalidList.join('');
 
   summaryWrap.style.display='block';
   sTotal.textContent=total;
