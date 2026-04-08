@@ -1,321 +1,121 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<title>PIYAS CC GEN</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>ISP Billing Panel</title><style>
+body{margin:0;font-family:'Segoe UI',sans-serif;background:#0f172a;color:#e2e8f0;}
+.container{max-width:1000px;margin:10px auto;padding:10px;border-radius:12px;background:#1e293b;}
+h2{text-align:center;color:#38bdf8;margin:10px 0;}
 
-<style>
-*{box-sizing:border-box}
-html,body{
-  margin:0;padding:0;
-  background:#050508;color:#e5e7eb;
-  font-family:Arial,sans-serif;
-  touch-action:manipulation;
-  overscroll-behavior:none;
-  -webkit-text-size-adjust:100%;
-}
-body{padding:14px}
+input{width:100%;padding:10px;margin:5px 0;border-radius:8px;border:none;background:#334155;color:#fff;}
 
-/* RGB */
-@keyframes rgbMove{
-  0%{background-position:0% 50%}
-  50%{background-position:100% 50%}
-  100%{background-position:0% 50%}
-}
+button{border:none;border-radius:8px;padding:10px;font-weight:bold;margin-top:5px;}
+.addBtn{width:100%;background:#22c55e;color:#fff;}
+.switchBtn{width:100%;background:#3b82f6;color:#fff;}
+.searchBtn{width:100%;background:#f59e0b;color:#fff;}
 
-/* Glass */
-.glass{
-  position:relative;
-  padding:14px;
-  margin-bottom:14px;
-  border-radius:18px;
-  background:#0b0b12;
-  overflow:hidden;
-}
-.glass::before{
-  content:"";
-  position:absolute;
-  inset:-2px;
-  border-radius:20px;
-  background:linear-gradient(
-    90deg,#ff004c,#ffb300,#00ff9d,#00c8ff,#7a5cff,#ff00c8,#ff004c
-  );
-  background-size:400% 400%;
-  animation:rgbMove 8s linear infinite;
-}
-.glass::after{
-  content:"";
-  position:absolute;
-  inset:2px;
-  border-radius:16px;
-  background:#0b0b12;
-}
-.glass>*{position:relative;z-index:2}
+.card{background:#020617;padding:10px;margin-bottom:10px;border-radius:10px;font-size:13px;line-height:1.5;}
+.card div{margin:2px 0;word-break:break-word;}
 
-/* Title */
-#titleBox{
-  text-align:center;
-  font-size:22px;
-  font-weight:bold;
-  color:#ffd800;
-  margin-bottom:14px;
+.action button{margin-right:5px;font-size:11px;padding:5px 7px;}
+.edit{background:#3b82f6;}
+.delete{background:#ef4444;}
+.restore{background:#22c55e;}
+.perma{background:#ef4444;}
+
+.popup{position:fixed;top:0;left:0;width:100%;height:100%;background:#020617;display:none;align-items:center;justify-content:center;text-align:center;padding:20px;}
+.popup-content{color:#ef4444;font-size:18px;}
+.popup button{margin-top:15px;background:#ef4444;color:#fff;padding:10px 15px;}
+</style></head>
+<body><div class="container">
+<h2>ISP Billing Panel</h2><input id="search" placeholder="Search PPPoE / Name">
+<button class="searchBtn" onclick="doSearch()">Search</button><input id="name" placeholder="Client Name">
+<input id="phone" placeholder="Phone">
+<input id="address" placeholder="Address">
+<input id="ip" placeholder="PPPoE Username">
+<input id="bill" placeholder="Bill Amount"><button class="addBtn" onclick="addData()">Save</button> <button class="switchBtn" onclick="toggleView()">Switch Trash</button>
+
+<div id="list"></div>
+</div><div class="popup" id="popup"><div class="popup-content" id="popupText"></div></div><script>
+let dataList=JSON.parse(localStorage.getItem('ispData'))||[];
+let trashList=JSON.parse(localStorage.getItem('ispTrash'))||[];
+let editIndex=-1,showTrash=false;
+let searchQuery="";
+
+function getMonthKey(){let d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)}
+function getMonthLabel(){return new Date().toLocaleString('en-US',{month:'long',year:'numeric'})}
+
+function saveAll(){localStorage.setItem('ispData',JSON.stringify(dataList));localStorage.setItem('ispTrash',JSON.stringify(trashList));}
+
+function doSearch(){
+  searchQuery=document.getElementById('search').value.toLowerCase();
+  renderData();
 }
 
-/* Tabs */
-.tabs{display:flex;gap:10px;margin-bottom:14px}
-.tabs button{
-  flex:1;padding:10px;border-radius:14px;
-  background:#020617;color:#ffd800;
-  border:1px solid #334155;
-  font-weight:bold;cursor:pointer;
-}
-.tabs button.active{
-  border-color:#22d3ee;color:#00ff9d;
-}
+function renderData(){
+let container=document.getElementById('list');container.innerHTML='';
+let list=showTrash?trashList:dataList;
 
-/* Form */
-label{display:block;margin-bottom:6px;color:#ffd800;font-weight:bold}
-input,select,textarea{
-  width:100%;
-  padding:12px;
-  border-radius:12px;
-  border:1px solid #0ea5e9;
-  background:#020617;
-  color:#00ff9d;
-  outline:none;
-  font-family:Courier New,monospace;
-}
-textarea{height:180px;font-size:13px}
-button.main{
-  width:100%;padding:14px;border-radius:18px;
-  background:#020617;color:#ffd800;
-  border:1px solid #334155;
-  font-weight:bold;cursor:pointer;margin-bottom:8px;
-}
+list.filter(d=>
+  d.ip.includes(searchQuery)||
+  d.name.toLowerCase().includes(searchQuery)||
+  d.phone.includes(searchQuery)||
+  d.address.toLowerCase().includes(searchQuery)
+).forEach((d,i)=>{
 
-/* Summary */
-.summaryItem{
-  display:flex;
-  justify-content:space-between;
-  font-family:Courier New,monospace;
-  font-size:15px;
-}
-.pass{color:#22ff00}
-.fail{color:#ff4d4d}
-.key{color:#ffd800}
+let btn=showTrash?
+`<button class='restore' onclick='restoreData(${i})'>Restore</button><button class='perma' onclick='permaDelete(${i})'>Delete</button>`:
+`<button class='edit' onclick='editData(${i})'>Edit</button><button class='delete' onclick='deleteData(${i})'>Delete</button>`;
 
-/* Card rows */
-.cardRow{
-  font-family:Courier New,monospace;
-  font-size:13px;
-  line-height:1.6;
-}
-.val{color:#00ff9d}
+let card=`<div class='card'>
+<div><b>Name:</b> ${d.name}</div>
+<div><b>Phone:</b> ${d.phone}</div>
+<div><b>Address:</b> ${d.address}</div>
+<div><b>User:</b> ${d.ip}</div>
+<div><b>Month:</b> ${d.monthLabel}</div>
+<div><b>Bill:</b> ${d.bill}</div>
+<div><b>Time:</b> ${d.time}</div>
+<div class='action'>${btn}</div>
+</div>`;
 
-/* Big copy button */
-.copyBtn{
-  width:100%;
-  margin-top:14px;
-  padding:14px;
-  border-radius:16px;
-  background:#020617;
-  border:1px solid #334155;
-  color:#00ff9d;
-  font-size:14px;
-  font-weight:bold;
-  cursor:pointer;
-}
+container.innerHTML+=card;
+});}
 
-/* Toast */
-#toast{
-  position:fixed;
-  bottom:20px;
-  left:50%;
-  transform:translateX(-50%);
-  background:#111;
-  color:#00ff9d;
-  padding:10px 18px;
-  border-radius:20px;
-  border:1px solid #00ff9d;
-  opacity:0;
-  transition:.3s;
-}
-#toast.show{opacity:1;bottom:30px}
-</style>
-</head>
+function showPopup(msg){let p=document.getElementById('popup');document.getElementById('popupText').innerHTML=msg+"<br><button onclick='closePopup()'>OK</button>";p.style.display='flex';}
+function closePopup(){document.getElementById('popup').style.display='none';}
 
-<body>
+function addData(){
+let n=v('name'),p=v('phone'),a=v('address'),ip=v('ip').toLowerCase(),b=v('bill');
+if(!n||!p||!a||!ip||!b){showPopup('Fill all fields');return}
 
-<div id="titleBox">PIYAS CC GEN</div>
+let mk=getMonthKey(),ml=getMonthLabel();
+let ex=dataList.find((d,i)=>d.ip===ip&&d.monthKey===mk&&i!==editIndex);
+if(ex){showPopup(`Duplicate\n${ex.ip}\n${ex.time}`);return}
 
-<div class="tabs">
-  <button id="tabGen" class="active" onclick="showTab('gen')">GEN</button>
-  <button id="tabChk" onclick="showTab('chk')">CHECKER</button>
-</div>
+let t=new Date().toLocaleString();
+let obj={name:n,phone:p,address:a,ip,bill:b,time:t,monthKey:mk,monthLabel:ml};
 
-<!-- GEN -->
-<div id="genTab">
-  <div class="glass"><label>BIN </label><input id="bin"></div>
-  <div class="glass">
-    <label>Month</label>
-    <select id="month">
-      <option value="">Random</option>
-      <option>01</option><option>02</option><option>03</option>
-      <option>04</option><option>05</option><option>06</option>
-      <option>07</option><option>08</option><option>09</option>
-      <option>10</option><option>11</option><option>12</option>
-    </select>
-  </div>
-  <div class="glass"><label>Year</label><input id="year"></div>
-  <div class="glass"><label>CVV</label><input id="cvv"></div>
-  <div class="glass"><label>Quantity </label><input id="qty" value="10"></div>
-  <div class="glass">
-    <button class="main" onclick="generate()">GENERATE</button>
-    <button class="main" onclick="copyAll()">COPY ALL</button>
-  </div>
-  <textarea id="out" readonly></textarea>
-</div>
+if(editIndex===-1)dataList.push(obj); else{dataList[editIndex]=obj;editIndex=-1}
 
-<!-- CHECKER -->
-<div id="chkTab" style="display:none">
+saveAll();
+searchQuery = ""; // reset search after save
+renderData();
+clearForm();}
 
-  <!-- SUMMARY BOXES -->
-  <div id="summaryWrap" style="display:none">
-    <div class="glass"><div class="summaryItem"><span class="key">Total Cards</span><span id="sTotal">0</span></div></div>
-    <div class="glass"><div class="summaryItem"><span class="key">Valid</span><span id="sValid" class="pass">0</span></div></div>
-    <div class="glass"><div class="summaryItem"><span class="key">Invalid</span><span id="sInvalid" class="fail">0</span></div></div>
-    <div class="glass"><div class="summaryItem"><span class="key">Date OK</span><span id="sDateOk" class="pass">0</span></div></div>
-    <div class="glass"><div class="summaryItem"><span class="key">Date Bad</span><span id="sDateBad" class="fail">0</span></div></div>
-  </div>
+function v(id){return document.getElementById(id).value.trim();}
 
-  <div class="glass">
-    <label>Paste Cards </label>
-    <textarea id="inp"></textarea>
-    <button class="main" onclick="runCheck()">START CHECK</button>
-  </div>
+function editData(i){let d=dataList[i];['name','phone','address','ip','bill'].forEach(k=>document.getElementById(k).value=d[k]);editIndex=i}
 
-  <div id="results"></div>
-</div>
+function deleteData(i){let x=dataList.splice(i,1)[0];x.deletedAt=new Date().toLocaleString();trashList.push(x);saveAll();renderData();}
 
-<div id="toast">Copied</div>
+function restoreData(i){let x=trashList.splice(i,1)[0];dataList.push(x);saveAll();renderData();}
 
-<script>
-/* Tabs */
-function showTab(t){
-  genTab.style.display=t==='gen'?'block':'none';
-  chkTab.style.display=t==='chk'?'block':'none';
-  tabGen.classList.toggle('active',t==='gen');
-  tabChk.classList.toggle('active',t==='chk');
-}
+function permaDelete(i){if(confirm('Delete forever?')){trashList.splice(i,1);saveAll();renderData();}}
 
-/* Helpers */
-function luhn(n){
-  let s=0,d=false;
-  for(let i=n.length-1;i>=0;i--){
-    let c=parseInt(n[i]); if(isNaN(c)) return false;
-    if(d){c*=2;if(c>9)c-=9}
-    s+=c; d=!d;
-  }
-  return s%10===0;
-}
-function dateOk(m,y){
-  const d=new Date(),cy=d.getFullYear(),cm=d.getMonth()+1;
-  return m>=1&&m<=12&&(y>cy||(y==cy&&m>=cm));
-}
-function randomYear(){return new Date().getFullYear()+Math.floor(Math.random()*6)}
-function randomMonth(y){
-  const d=new Date(),cy=d.getFullYear(),cm=d.getMonth()+1;
-  return y==cy?String(Math.floor(Math.random()*(12-cm+1))+cm).padStart(2,'0')
-              :String(Math.floor(Math.random()*12)+1).padStart(2,'0');
-}
+function toggleView(){showTrash=!showTrash;renderData();}
 
-/* Generate (demo/testing only) */
-function generate(){
-  if(bin.value.length<6){toastMsg('BIN min 6');return;}
-  let q=Math.min(parseInt(qty.value)||10,1000),o=[];
-  for(let i=0;i<q;i++){
-    let c=bin.value;
-    while(c.length<16)c+=Math.floor(Math.random()*10);
-    let y=year.value||randomYear();
-    let m=month.value||randomMonth(y);
-    let v=cvv.value||Math.floor(100+Math.random()*900);
-    o.push(c+"|"+m+"|"+y+"|"+v);
-  }
-  out.value=o.join("\n");
-}
+function clearForm(){['name','phone','address','ip','bill'].forEach(id=>document.getElementById(id).value='');}
 
-/* Copy */
-function copyAll(){ if(!out.value){toastMsg('Nothing');return;} copyText(out.value); }
-function copyText(t){
-  const ta=document.createElement('textarea');
-  ta.value=t;document.body.appendChild(ta);
-  ta.select();document.execCommand('copy');
-  document.body.removeChild(ta);
-  toastMsg('Copied');
-}
-
-/* Checker + Summary
-   EDIT: Valid cards will be shown FIRST */
-function runCheck(){
-  results.innerHTML='';
-  let total=0,validC=0,invalidC=0,dateOkC=0,dateBadC=0;
-
-  const validList=[];
-  const invalidList=[];
-
-  inp.value.trim().split("\n").forEach(l=>{
-    if(!l) return;
-    total++;
-
-    const p=l.split('|');
-    const num=p[0]||'', mm=p[1], yy=p[2], cv=p[3]||'';
-    const valid=luhn(num), dOK=dateOk(mm,yy);
-
-    if(valid) validC++; else invalidC++;
-    if(dOK) dateOkC++; else dateBadC++;
-
-    const cardHTML=`
-      <div class="glass">
-        <div class="cardRow"><span class="key">Card</span> : <span class="val">${num}</span></div>
-        <div class="cardRow"><span class="key">MM</span>   : ${mm}</div>
-        <div class="cardRow"><span class="key">YY</span>   : ${yy}</div>
-        <div class="cardRow"><span class="key">CVV</span>  : ${cv}</div>
-        <hr>
-        <div class="cardRow"><span class="key">Valid</span> :
-          <span class="${valid?'pass':'fail'}">${valid?'VALID':'INVALID'}</span>
-        </div>
-        <div class="cardRow"><span class="key">Date</span>  :
-          <span class="${dOK?'pass':'fail'}">${dOK?'OK':'BAD'}</span>
-        </div>
-        <button class="copyBtn" onclick="copyText('${l}')">COPY THIS CARD</button>
-      </div>
-    `;
-
-    if(valid) validList.push(cardHTML);
-    else invalidList.push(cardHTML);
-  });
-
-  /* VALID first */
-  results.innerHTML = validList.join('') + invalidList.join('');
-
-  summaryWrap.style.display='block';
-  sTotal.textContent=total;
-  sValid.textContent=validC;
-  sInvalid.textContent=invalidC;
-  sDateOk.textContent=dateOkC;
-  sDateBad.textContent=dateBadC;
-}
-
-/* Toast */
-let tmr;
-function toastMsg(m){
-  toast.textContent=m;
-  toast.classList.add('show');
-  clearTimeout(tmr);
-  tmr=setTimeout(()=>toast.classList.remove('show'),1800);
-}
-</script>
-
-</body>
+renderData();
+</script></body>
 </html>
