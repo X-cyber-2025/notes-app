@@ -18,7 +18,7 @@ user-scalable=no">
 :root{
     --bg1:#020617;
     --bg2:#071226;
-    --glass:rgba(255,255,255,.08);
+    --glass:rgba(10,15,30,.45);
     --border:rgba(255,255,255,.12);
     --text:#f8fafc;
     --muted:#cbd5e1;
@@ -31,34 +31,39 @@ user-scalable=no">
     box-sizing:border-box;
 }
 
-html,body{
-    width:100%;
-    height:100%;
-    overflow:hidden;
+html{
     touch-action:manipulation;
-    -webkit-text-size-adjust:100%;
 }
 
 body{
     min-height:100vh;
+    overflow-x:hidden;
+    overflow-y:auto;
+
     display:flex;
     justify-content:center;
     align-items:center;
-    position:relative;
-    padding:20px;
-    font-family:'Noto Sans Bengali',sans-serif;
 
-    user-select:none;
-    -webkit-user-select:none;
-    -webkit-touch-callout:none;
+    position:relative;
+
+    padding:20px;
+
+    font-family:'Noto Sans Bengali',sans-serif;
 
     background:
     radial-gradient(circle at top,#0f172a 0%,transparent 40%),
     radial-gradient(circle at bottom,#0ea5e922 0%,transparent 35%),
     linear-gradient(to bottom,var(--bg1),var(--bg2));
+
+    touch-action:manipulation;
+
+    -webkit-user-select:none;
+    user-select:none;
 }
 
-/* SKY */
+/* =========================
+   SKY
+========================= */
 
 .sky{
     position:absolute;
@@ -107,84 +112,9 @@ body{
     }
 }
 
-/* MOON */
-
-.moon{
-    position:fixed;
-    top:40px;
-    right:60px;
-
-    width:180px;
-    height:180px;
-
-    border-radius:50%;
-
-    z-index:999;
-
-    background:
-    radial-gradient(circle at 30% 30%,
-    #ffffff 0%,
-    #fefce8 25%,
-    #f8fafc 55%,
-    #e2e8f0 80%,
-    #cbd5e1 100%);
-
-    box-shadow:
-    0 0 70px rgba(255,255,255,1),
-    0 0 140px rgba(255,255,255,.75),
-    0 0 260px rgba(255,255,255,.4);
-
-    animation:moonFloat 6s ease-in-out infinite;
-}
-
-.moon::before{
-    content:'';
-
-    position:absolute;
-    inset:-25px;
-
-    border-radius:50%;
-
-    background:rgba(255,255,255,.15);
-
-    filter:blur(35px);
-
-    z-index:-1;
-}
-
-.moon::after{
-    content:'';
-
-    position:absolute;
-
-    top:18px;
-    left:30px;
-
-    width:55px;
-    height:55px;
-
-    border-radius:50%;
-
-    background:
-    radial-gradient(circle,
-    rgba(255,255,255,.9),
-    transparent 70%);
-
-    filter:blur(6px);
-}
-
-@keyframes moonFloat{
-
-    0%,100%{
-        transform:translateY(0px);
-    }
-
-    50%{
-        transform:translateY(-10px);
-    }
-}
-
-/* CLOUDS */
+/* =========================
+   CLOUDS
+========================= */
 
 .cloud{
     position:absolute;
@@ -204,14 +134,17 @@ body{
 .cloud.one{
     width:260px;
     height:70px;
+
     top:120px;
     left:-300px;
+
     animation:cloudMove 55s linear infinite;
 }
 
 .cloud.one::before{
     width:110px;
     height:110px;
+
     top:-45px;
     left:30px;
 }
@@ -219,6 +152,7 @@ body{
 .cloud.one::after{
     width:130px;
     height:130px;
+
     top:-55px;
     right:30px;
 }
@@ -226,16 +160,20 @@ body{
 .cloud.two{
     width:320px;
     height:90px;
+
     top:320px;
     left:-400px;
+
     animation:cloudMove 75s linear infinite;
 }
 
 .cloud.three{
     width:220px;
     height:60px;
+
     top:520px;
     left:-260px;
+
     animation:cloudMove 60s linear infinite;
 }
 
@@ -250,10 +188,13 @@ body{
     }
 }
 
-/* SHOOTING STAR */
+/* =========================
+   SHOOTING STAR
+========================= */
 
 .shooting-star{
     position:absolute;
+
     top:140px;
     left:-300px;
 
@@ -292,7 +233,9 @@ body{
     }
 }
 
-/* CARD */
+/* =========================
+   GLASS CARD
+========================= */
 
 .card{
     position:relative;
@@ -373,7 +316,9 @@ body{
     }
 }
 
-/* HEADER */
+/* =========================
+   HEADER
+========================= */
 
 .header{
     text-align:center;
@@ -403,6 +348,9 @@ body{
 .header h1{
     font-size:52px;
     font-weight:700;
+
+    letter-spacing:1px;
+
     color:#fff;
 
     text-shadow:
@@ -426,7 +374,9 @@ body{
     #fde047);
 }
 
-/* MESSAGE */
+/* =========================
+   MESSAGE
+========================= */
 
 .message{
     text-align:center;
@@ -446,6 +396,8 @@ body{
     font-weight:700;
 }
 
+/* Footer */
+
 .footer{
     margin-top:10px;
     text-align:center;
@@ -454,20 +406,14 @@ body{
     opacity:.8;
 }
 
-/* MOBILE */
+/* =========================
+   MOBILE
+========================= */
 
 @media(max-width:768px){
 
     body{
         padding:16px;
-    }
-
-    .moon{
-        width:110px;
-        height:110px;
-
-        top:20px;
-        right:15px;
     }
 
     .card{
@@ -498,6 +444,7 @@ body{
 
 <body>
 
+<!-- SKY -->
 <div class="sky">
 
     <div class="star small" style="top:8%;left:12%;"></div>
@@ -518,23 +465,24 @@ body{
 
 </div>
 
-<div class="moon"></div>
-
+<!-- Clouds -->
 <div class="cloud one"></div>
 <div class="cloud two"></div>
 <div class="cloud three"></div>
 
+<!-- Shooting Star -->
 <div class="shooting-star"></div>
 
+<!-- Card -->
 <div class="card">
 
     <div class="header">
 
         <div class="badge">
-            🌸🕊️ اَلسَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللهِ وَبَرَكَاتُهُ 🕊️🌸
+            🌸 اَلسَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللهِ وَبَرَكَاتُهُ 🌸
         </div>
 
-        <h1>𝔼𝕚𝕕 𝕄𝕦𝕓𝕒𝕣𝕒𝕜 প্রি'য়</h1>
+        <h1>𝔼𝕚𝕕 𝕄𝕦𝕓𝕒𝕣𝕒𝕜 প্রি'য় 🤗</h1>
 
         <div class="line"></div>
 
@@ -543,23 +491,23 @@ body{
     <div class="message">
 
         <p>
-        ঈদের চাঁদ উঠুক তোমার আকাশে শান্তির আলো হয়ে,<br>
-            তোমার প্রতিটা সকাল ভরে উঠুক ভালোবাসা আর হাসিতে 
+            ঈদের চাঁদ উঠুক তোমার আকাশে শান্তির আলো হয়ে<br>
+            তোমার প্রতিটা সকাল ভরে উঠুক ভালোবাসা আর হাসিতে ✨
         </p>
 
         <p>
             এই ঈদে আমার একটাই দোয়া<br>
             তোমার জীবনের সব অন্ধকার দূরে সরে যাক<br>
-            আর তোমার পৃথিবী ভরে উঠুক সুখ, শান্তি আর মায়ায়। 
+            আর তোমার পৃথিবী ভরে উঠুক সুখ, শান্তি আর মায়ায় 🌸
         </p>
 
         <p>
-            হাজার তারার এই নীল রাতেও<br>
-            আমার হৃদয় শুধু তোমাকেই খুঁজে বেড়ায়
+            জানো তো, হাজার মানুষের ভিড়েও<br>
+            আমার হৃদয় শুধু তোমাকেই খুঁজে বেড়ায় 🤍
         </p>
 
         <p class="highlight">
-            ঈদ মোবারক প্রি'য় 🤗<br>
+            ঈদ মোবারক প্রি'য় ɪsʀAᴛ<br>
             তোমার জীবন হোক আকাশের চাঁদের মতোই সুন্দর।
         </p>
 
@@ -570,6 +518,28 @@ body{
     </div>
 
 </div>
+
+<script>
+
+document.addEventListener('gesturestart', function(e){
+    e.preventDefault();
+});
+
+let lastTouchEnd = 0;
+
+document.addEventListener('touchend', function(e){
+
+    const now = (new Date()).getTime();
+
+    if(now - lastTouchEnd <= 300){
+        e.preventDefault();
+    }
+
+    lastTouchEnd = now;
+
+}, false);
+
+</script>
 
 </body>
 </html>
